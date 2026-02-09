@@ -42,6 +42,10 @@ let recognition;
 
 if ('webkitSpeechRecognition' in window) {
     recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+recognition.interimResults = false;
+recognition.lang = "hi-IN";
+
     recognition.lang = 'hi-IN';   // Hindi
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -49,7 +53,8 @@ if ('webkitSpeechRecognition' in window) {
     recognition.onresult = function(event) {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-            finalTranscript += event.results[i][0].transcript;
+            output.value += event.results[event.results.length - 1][0].transcript + " ";
+
         }
         document.getElementById("output").value = finalTranscript;
     };
@@ -82,3 +87,4 @@ function downloadText() {
 
 </body>
 </html>
+
