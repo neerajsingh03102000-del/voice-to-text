@@ -39,24 +39,21 @@ button{
 
 <script>
 let recognition;
+let output = document.getElementById("output");
 
 if ('webkitSpeechRecognition' in window) {
     recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-recognition.interimResults = false;
-recognition.lang = "hi-IN";
 
-    recognition.lang = 'hi-IN';   // Hindi
-    recognition.continuous = true;
-    recognition.interimResults = true;
+    // 🔥 MAIN SETTINGS
+    recognition.lang = "hi-IN";          // Hindi (later English bhi kar sakte hain)
+    recognition.continuous = true;       // bolte jao, rukega nahi
+    recognition.interimResults = false;  // aadha text nahi
 
+    // 🎯 RESULT HANDLER
     recognition.onresult = function(event) {
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            output.value += event.results[event.results.length - 1][0].transcript + " ";
-
-        }
-        document.getElementById("output").value = finalTranscript;
+        const lastResultIndex = event.results.length - 1;
+        const transcript = event.results[lastResultIndex][0].transcript;
+        output.value += transcript + " ";
     };
 
     recognition.onerror = function(event) {
@@ -67,16 +64,19 @@ recognition.lang = "hi-IN";
     alert("Aapka browser Speech Recognition support nahi karta. Chrome use karein.");
 }
 
+// ▶ Start
 function startRecognition() {
     recognition.start();
 }
 
+// ⏹ Stop
 function stopRecognition() {
     recognition.stop();
 }
 
+// 💾 Save text
 function downloadText() {
-    const text = document.getElementById("output").value;
+    const text = output.value;
     const blob = new Blob([text], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -85,6 +85,8 @@ function downloadText() {
 }
 </script>
 
+
 </body>
 </html>
+
 
